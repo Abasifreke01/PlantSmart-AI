@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const PredictionResult = ({ results, isPredicting }) => {
   const [selectedCrop, setSelectedCrop] = useState(null);
@@ -18,7 +18,7 @@ const PredictionResult = ({ results, isPredicting }) => {
       <div className="empty-state">
         <div className="empty-icon">🌱</div>
         <h3>Awaiting Data</h3>
-        <p>Enter your data on the left to discover your top 10 optimal crops.</p>
+        <p>Enter your data on the left to discover your top 20 optimal crops.</p>
       </div>
     );
   }
@@ -33,7 +33,7 @@ const PredictionResult = ({ results, isPredicting }) => {
 
   return (
     <div className="results-container">
-      <h2 className="results-title">Top 10 Recommended Crops</h2>
+      <h2 className="results-title">Top 20 Recommended Crops</h2>
       <p style={{textAlign: 'center', marginBottom: '2rem', color: 'var(--text-light)'}}>Click on a crop to view best practices.</p>
       
       <div className="results-grid">

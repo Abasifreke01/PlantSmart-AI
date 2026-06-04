@@ -110,7 +110,7 @@ const cropsDatabase = [
     ]
   },
   { 
-    name: 'Tomato', icon: '🍅', desc: 'Needs moderate warmth and good nutrient balance.', 
+    name: 'Tomato', icon: '🍅', desc: 'Needs moderate warmth and good nutrient balance.', isVegetable: true,
     req: { n: [60, 100], p: [30, 60], k: [40, 80], temp: [20, 30], hum: [60, 80], ph: [6.0, 7.0], rain: [60, 100] },
     bestPractices: [
       "Stake or trellis the plants to keep fruit off the ground and improve airflow.",
@@ -120,7 +120,7 @@ const cropsDatabase = [
     ]
   },
   { 
-    name: 'Potato', icon: '🥔', desc: 'Grows best in cooler climates with slightly acidic soil.', 
+    name: 'Potato', icon: '🥔', desc: 'Grows best in cooler climates with slightly acidic soil.', isVegetable: true,
     req: { n: [80, 120], p: [30, 70], k: [80, 140], temp: [15, 25], hum: [60, 80], ph: [5.0, 6.5], rain: [50, 100] },
     bestPractices: [
       "Use certified disease-free seed tubers.",
@@ -130,7 +130,7 @@ const cropsDatabase = [
     ]
   },
   { 
-    name: 'Onion', icon: '🧅', desc: 'Requires moderate climate with distinct seasons.', 
+    name: 'Onion', icon: '🧅', desc: 'Requires moderate climate with distinct seasons.', isVegetable: true,
     req: { n: [40, 80], p: [30, 60], k: [40, 80], temp: [15, 30], hum: [60, 70], ph: [6.0, 7.5], rain: [40, 80] },
     bestPractices: [
       "Onions have shallow roots; keep the topsoil consistently moist but not waterlogged.",
@@ -140,7 +140,7 @@ const cropsDatabase = [
     ]
   },
   { 
-    name: 'Garlic', icon: '🧄', desc: 'Similar to onion, thrives in moderate conditions.', 
+    name: 'Garlic', icon: '🧄', desc: 'Similar to onion, thrives in moderate conditions.', isVegetable: true,
     req: { n: [30, 70], p: [30, 60], k: [30, 70], temp: [15, 25], hum: [50, 70], ph: [6.0, 7.5], rain: [40, 80] },
     bestPractices: [
       "Plant individual cloves with the pointed end facing up.",
@@ -219,6 +219,105 @@ const cropsDatabase = [
       "Monitor for mango hoppers and fruit flies during the fruiting season."
     ]
   },
+  {
+    name: 'Water Leaf', icon: '🌿', desc: 'Fast-growing, highly nutritious leafy vegetable that thrives in warm, wet soils.',
+    isVegetable: true, isWaterLeaf: true,
+    req: { n: [50, 90], p: [20, 50], k: [30, 70], temp: [22, 35], hum: [60, 90], ph: [5.5, 7.0], rain: [100, 250] },
+    bestPractices: [
+      "Plant in rich, well-draining organic soil with moderate shade.",
+      "Keep soil constantly moist; water leaf requires consistent moisture.",
+      "Harvest shoots regularly (every 2-3 weeks) to promote bushy new growth.",
+      "Apply compost or well-rotted manure for optimal nitrogen supply."
+    ]
+  },
+  {
+    name: 'Ugu (Fluted Pumpkin)', icon: '🎃', desc: 'Highly prized tropical vine grown for its edible leaves and seeds.',
+    isVegetable: true,
+    req: { n: [60, 100], p: [30, 60], k: [40, 80], temp: [20, 32], hum: [60, 85], ph: [5.5, 7.0], rain: [120, 250] },
+    bestPractices: [
+      "Sow seeds directly in raised beds, ensuring the flat side faces down.",
+      "Provide a strong trellis support system for the vines to climb.",
+      "Mulch to conserve moisture and suppress competing weeds.",
+      "Harvest leaves by cutting the shoots; this encourages lateral branching."
+    ]
+  },
+  {
+    name: 'Spinach', icon: '🥬', desc: 'Nutrient-dense leafy green that prefers cooler weather and rich soil.',
+    isVegetable: true,
+    req: { n: [60, 90], p: [30, 50], k: [40, 70], temp: [10, 23], hum: [50, 80], ph: [6.0, 7.5], rain: [50, 100] },
+    bestPractices: [
+      "Sow seeds directly in fertile, well-prepared soil.",
+      "Ensure consistent watering; dry conditions cause early bolting (flowering).",
+      "Apply nitrogen-rich fertilizer to encourage lush leaf production.",
+      "Harvest outer leaves first, allowing the inner leaves to continue growing."
+    ]
+  },
+  {
+    name: 'Bitter Leaf', icon: '🍃', desc: 'Hardy perennial shrub widely used in West African cuisine and traditional medicine.',
+    isVegetable: true,
+    req: { n: [40, 80], p: [20, 50], k: [30, 60], temp: [20, 35], hum: [50, 85], ph: [5.5, 7.5], rain: [80, 200] },
+    bestPractices: [
+      "Propagate easily using stem cuttings planted at an angle.",
+      "Prune regularly to keep the plant bushy and initiate fresh leaf growth.",
+      "Apply organic compost around the base twice a year.",
+      "Watch for scale insects; spray with soapy water or neem oil."
+    ]
+  },
+  {
+    name: 'Lettuce', icon: '🥬', desc: 'Crisp, fast-growing salad vegetable suited for cooler microclimates.',
+    isVegetable: true,
+    req: { n: [40, 80], p: [20, 40], k: [30, 60], temp: [12, 22], hum: [50, 75], ph: [6.0, 7.0], rain: [40, 90] },
+    bestPractices: [
+      "Provide partial shade during hot afternoons to prevent bitterness.",
+      "Water the root zone directly to keep leaves dry and prevent rot.",
+      "Weed diligently as lettuce has shallow roots and poor competition.",
+      "Harvest early in the morning when leaves are crisp and full of moisture."
+    ]
+  },
+  {
+    name: 'Cabbage', icon: '🥬', desc: 'Heavy-feeding vegetable that forms solid leaf heads in cool-to-warm regions.',
+    isVegetable: true,
+    req: { n: [80, 120], p: [30, 60], k: [50, 90], temp: [15, 24], hum: [60, 80], ph: [6.0, 7.2], rain: [60, 120] },
+    bestPractices: [
+      "Ensure uniform soil moisture to prevent head splitting.",
+      "Cabbage is a heavy feeder; apply balanced organic fertilizers regularly.",
+      "Protect young plants from cabbage worms and aphids using floating row covers.",
+      "Harvest when heads are firm and compact when squeezed."
+    ]
+  },
+  {
+    name: 'Carrot', icon: '🥕', desc: 'Root vegetable that requires deep, loose, stone-free soil.',
+    isVegetable: true,
+    req: { n: [30, 60], p: [40, 70], k: [60, 110], temp: [15, 23], hum: [55, 75], ph: [5.8, 6.8], rain: [50, 100] },
+    bestPractices: [
+      "Plough soil deeply and remove stones to prevent crooked roots.",
+      "Avoid excess nitrogen, which causes hairy, split, or misshapen carrots.",
+      "Keep the soil moist during germination, which can take up to 3 weeks.",
+      "Thin seedlings to 5 cm apart once they reach 2 cm tall."
+    ]
+  },
+  {
+    name: 'Cucumber', icon: '🥒', desc: 'Vining vegetable requiring warm conditions and abundant moisture.',
+    isVegetable: true,
+    req: { n: [60, 100], p: [30, 60], k: [60, 100], temp: [20, 32], hum: [60, 80], ph: [6.0, 7.0], rain: [80, 150] },
+    bestPractices: [
+      "Grow on a trellis to save space, improve air circulation, and keep fruit clean.",
+      "Apply organic mulch to retain soil moisture and prevent weeds.",
+      "Ensure proper pollination by encouraging bees or hand-pollinating.",
+      "Harvest when cucumbers are firm and green; do not let them turn yellow."
+    ]
+  },
+  {
+    name: 'Bell Pepper', icon: '🫑', desc: 'Warm-season crop that rewards rich soil and consistent moisture.',
+    isVegetable: true,
+    req: { n: [60, 100], p: [30, 60], k: [50, 90], temp: [20, 30], hum: [60, 80], ph: [6.0, 6.8], rain: [60, 120] },
+    bestPractices: [
+      "Stake plants early to support heavy fruit loads.",
+      "Maintain uniform watering to prevent blossom end rot.",
+      "Harvest when green, or let them ripen to red, yellow, or orange for sweeter flavor.",
+      "Protect from frost and strong cold winds."
+    ]
+  }
 ];
 
 const calculateScore = (value, [min, max]) => {
@@ -230,7 +329,7 @@ const calculateScore = (value, [min, max]) => {
   return Math.max(0, 100 - penalty);
 };
 
-export const predictTop10Crops = (data) => {
+export const predictTop20Crops = (data) => {
   const { n, p, k, temperature, humidity, ph, rainfall } = data;
   
   const scoredCrops = cropsDatabase.map(crop => {
@@ -242,17 +341,30 @@ export const predictTop10Crops = (data) => {
     const phScore = calculateScore(ph, crop.req.ph);
     const rainScore = calculateScore(rainfall, crop.req.rain);
     
-    const totalScore = (nScore + pScore + kScore + tempScore + humScore + phScore + rainScore) / 7;
+    const baseScore = (nScore + pScore + kScore + tempScore + humScore + phScore + rainScore) / 7;
+    
+    // Priority Boost
+    let boost = 0;
+    if (crop.isWaterLeaf) {
+      boost += 25; // Large boost for Water Leaf
+    } else if (crop.isVegetable) {
+      boost += 15; // Moderate boost for all vegetables
+    }
+    
+    // Add random noise variance (0 to 12 points) to shuffle positions slightly
+    const noise = Math.random() * 12;
+    
+    const finalScore = Math.min(100, Math.round(baseScore + boost + noise));
     
     return {
       crop: crop.name,
       description: crop.desc,
       icon: crop.icon,
       bestPractices: crop.bestPractices,
-      score: Math.round(totalScore)
+      score: finalScore
     };
   });
   
   scoredCrops.sort((a, b) => b.score - a.score);
-  return scoredCrops.slice(0, 10);
+  return scoredCrops.slice(0, 20);
 };

@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-const EnvironmentalForm = ({ onPredict, isPredicting }) => {
+const EnvironmentalForm = ({ onPredict, isPredicting, reloadInputs }) => {
   const [formData, setFormData] = useState({
-    n: 50,
-    p: 50,
-    k: 50,
-    temperature: 25,
-    humidity: 60,
-    ph: 6.5,
-    rainfall: 100
+    n: reloadInputs?.n ?? 50,
+    p: reloadInputs?.p ?? 50,
+    k: reloadInputs?.k ?? 50,
+    temperature: reloadInputs?.temperature ?? 25,
+    humidity: reloadInputs?.humidity ?? 60,
+    ph: reloadInputs?.ph ?? 6.5,
+    rainfall: reloadInputs?.rainfall ?? 100
   });
 
-  const [locationName, setLocationName] = useState('');
-  const [locationQuery, setLocationQuery] = useState('');
+  const [locationName, setLocationName] = useState(reloadInputs?.location || '');
+  const [locationQuery, setLocationQuery] = useState(reloadInputs?.location || '');
   const [isLocating, setIsLocating] = useState(false);
 
   const handleChange = (e) => {
@@ -22,7 +22,7 @@ const EnvironmentalForm = ({ onPredict, isPredicting }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onPredict(formData);
+    onPredict({ ...formData, location: locationName || 'Manual Entry' });
   };
 
   const fetchWeatherData = async (lat, lon, name) => {
@@ -41,7 +41,7 @@ const EnvironmentalForm = ({ onPredict, isPredicting }) => {
         k: Math.floor(Math.random() * 40) + 20,
         temperature: temp,
         humidity: hum,
-        ph: (Math.random() * 2 + 5.5).toFixed(1), // 5.5 to 7.5
+        ph: parseFloat((Math.random() * 2 + 5.5).toFixed(1)), // 5.5 to 7.5
         rainfall: isTropical ? Math.floor(Math.random() * 100) + 150 : Math.floor(Math.random() * 100) + 50
       };
 
@@ -49,7 +49,7 @@ const EnvironmentalForm = ({ onPredict, isPredicting }) => {
       setLocationName(name);
       
       // Automatically trigger prediction
-      onPredict(newFormData);
+      onPredict({ ...newFormData, location: name });
     } catch (err) {
       console.error(err);
       alert("Failed to fetch weather data for this location.");
