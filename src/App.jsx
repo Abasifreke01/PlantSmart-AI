@@ -1,148 +1,154 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
+import EnvironmentalForm from './components/EnvironmentalForm';
+import PredictionResult from './components/PredictionResult';
+import AnalyticsDashboard from './components/AnalyticsDashboard';
+import { predictTop20Crops } from './utils/aiLogic';
+import logo from './assets/logo.jpg';
+import './index.css';
 
-/**
- * PlantSmart AI - Single File Landing Page
- * Location-first version.
- * Hook your crop prediction engine into handleAnalyzeLocation().
- */
+function App() {
+  const [activeTab, setActiveTab] = useState('predictor');
+  const [results, setResults] = useState(null);
+  const [isPredicting, setIsPredicting] = useState(false);
+  const [reloadInputs, setReloadInputs] = useState(null);
 
-export default function App() {
-  const [mobileMenu, setMobileMenu] = useState(false);
-  const [location, setLocation] = useState("");
-  const [analysis, setAnalysis] = useState(null);
+  // Initialize history state from localStorage (starts empty by default)
+  const [history, setHistory] = useState(() => {
+    const saved = localStorage.getItem('plantsmart_history');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed;
+      } catch (e) {
+        console.error("Failed to parse history from localStorage", e);
+        return [];
+      }
+    }
+    return [];
+  });
 
-  const handleAnalyzeLocation = () => {
-    const recommendations = [
-      "Cassava",
-      "Maize",
-      "Yam",
-      "Plantain",
-      "Rice"
-    ];
+  // Sync history to localStorage
+  useEffect(() => {
+    localStorage.setItem('plantsmart_history', JSON.stringify(history));
+  }, [history]);
 
-    setAnalysis({
-      location: location || "Detected Location",
-      score: 95,
-      recommendations,
-    });
+  const handlePredict = (data) => {
+    setIsPredicting(true);
+    // Simulate slight delay for "AI" thinking effect
+    setTimeout(() => {
+      const topCrops = predictTop20Crops(data);
+      setResults(topCrops);
+      setIsPredicting(false);
+
+      // Save to prediction history
+      const topCrop = topCrops[0] 
+        ? { crop: topCrops[0].crop, icon: topCrops[0].icon, score: topCrops[0].score }
+        : { crop: 'Unknown', icon: '🌱', score: 0 };
+
+      const newRecord = {
+        id: 'rec-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7),
+        timestamp: new Date().toISOString(),
+        location: data.location || 'Manual Entry',
+        inputs: {
+          n: data.n,
+          p: data.p,
+          k: data.k,
+          temperature: data.temperature,
+          humidity: data.humidity,
+          ph: data.ph,
+          rainfall: data.rainfall
+        },
+        topCrop
+      };
+
+      setHistory(prev => [newRecord, ...prev]);
+    }, 1200); 
   };
 
-  useEffect(() => {
-    const reveal = () => {
-      document.querySelectorAll(".reveal").forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight - 80) {
-          el.classList.add("visible");
-        }
-      });
-    };
+  // Reload history item back into input form and run prediction
+  const handleReload = (inputs, location) => {
+    setReloadInputs({ ...inputs, location });
+    setActiveTab('predictor');
+    
+    // Automatically trigger prediction for loaded data
+    setIsPredicting(true);
+    setTimeout(() => {
+      const topCrops = predictTop20Crops(inputs);
+      setResults(topCrops);
+      setIsPredicting(false);
+    }, 800);
+  };
 
-    reveal();
-    window.addEventListener("scroll", reveal);
-    return () => window.removeEventListener("scroll", reveal);
-  }, []);
+  const handleClearHistory = () => {
+    setHistory([]);
+  };
+
+  const handleDeleteItem = (id) => {
+    setHistory(prev => prev.filter(item => item.id !== id));
+  };
 
   return (
-    <div>
-      <style>{`
-        body{margin:0;font-family:Inter,sans-serif;background:#fff}
-        .nav{display:flex;justify-content:space-between;padding:20px 40px;position:sticky;top:0;background:white;border-bottom:1px solid #eee}
-        .hero{padding:100px 20px;text-align:center}
-        .btn{background:#22C55E;color:white;padding:14px 24px;border:none;border-radius:999px;cursor:pointer}
-        .outline{background:white;color:#111;border:1px solid #111}
-        .section{padding:80px 20px;max-width:1200px;margin:auto}
-        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
-        .card{border:1px solid #e5e7eb;padding:24px;border-radius:16px}
-        .analyzer{background:#f0fdf4;padding:30px;border-radius:20px}
-        input{padding:14px;width:100%;margin-bottom:10px;border:1px solid #ddd;border-radius:10px}
-        .reveal{opacity:0;transform:translateY(20px);transition:.4s}
-        .visible{opacity:1;transform:none}
-      `}</style>
+    <div className="app-container">
+      <header className="header">
+        <div className="logo-container">
+          <img src={logo} alt="PlantSmart AI Logo" className="app-logo" />
+        </div>
+        <h1>PlantSmart AI</h1>
+        <p>Discover the optimal crop for your land based on environmental data.</p>
+      </header>
 
-      <nav className="nav">
-        <h2>🌾 PlantSmart AI</h2>
-        <button className="btn" onClick={() => setMobileMenu(!mobileMenu)}>
-          Menu
+      {/* Segmented Tab Navigation */}
+      <div className="tab-navigation glass-panel">
+        <button 
+          type="button"
+          className={`tab-btn ${activeTab === 'predictor' ? 'active' : ''}`}
+          onClick={() => setActiveTab('predictor')}
+        >
+          🔮 Crop Predictor
         </button>
-      </nav>
+        <button 
+          type="button"
+          className={`tab-btn ${activeTab === 'analytics' ? 'active' : ''}`}
+          onClick={() => setActiveTab('analytics')}
+        >
+          📊 Insights & Analytics
+        </button>
+      </div>
 
-      <section className="hero">
-        <h1>
-          Discover the Best Crops for Your <span style={{color:"#22C55E"}}>Location</span>
-        </h1>
+      {activeTab === 'predictor' ? (
+        <main className="main-content">
+          <section className="glass-panel form-panel">
+            <h2>Environmental Data</h2>
+            <EnvironmentalForm 
+              key={reloadInputs ? `reload-${reloadInputs.n}-${reloadInputs.p}-${reloadInputs.k}-${reloadInputs.location}` : 'default'}
+              onPredict={handlePredict} 
+              isPredicting={isPredicting} 
+              reloadInputs={reloadInputs}
+            />
+          </section>
 
-        <p>
-          AI-powered crop recommendations using location, rainfall,
-          temperature, humidity, and environmental analysis.
-        </p>
+          <section className="glass-panel results-panel">
+            <PredictionResult results={results} isPredicting={isPredicting} />
+          </section>
+        </main>
+      ) : (
+        <AnalyticsDashboard 
+          history={history} 
+          onReload={handleReload} 
+          onClear={handleClearHistory}
+          onDeleteItem={handleDeleteItem}
+        />
+      )}
 
-        <button className="btn">📍 Analyze Crops Based on Location</button>
-      </section>
-
-      <section className="section">
-        <div className="analyzer">
-          <h2>Analyze Crops Based On Your Location</h2>
-
-          <input
-            value={location}
-            onChange={(e)=>setLocation(e.target.value)}
-            placeholder="Enter State, City or LGA"
-          />
-
-          <button className="btn" onClick={handleAnalyzeLocation}>
-            Analyze Crops
-          </button>
-
-          {analysis && (
-            <div style={{marginTop:20}}>
-              <h3>{analysis.location}</h3>
-              <p>Suitability Score: {analysis.score}%</p>
-              <ul>
-                {analysis.recommendations.map((crop)=>(
-                  <li key={crop}>{crop}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      </section>
-
-      <section className="section reveal">
-        <h2>Core Features</h2>
-        <div className="grid">
-          <div className="card">
-            <h3>📍 Location Crop Recommendation</h3>
-            <p>Find crops best suited for your location.</p>
-          </div>
-          <div className="card">
-            <h3>🌦 Climate Analysis</h3>
-            <p>Uses rainfall, humidity and temperature.</p>
-          </div>
-          <div className="card">
-            <h3>🌱 Plant Identification</h3>
-            <p>Identify crops and plants instantly.</p>
-          </div>
-          <div className="card">
-            <h3>🐛 Disease Detection</h3>
-            <p>Detect crop diseases using AI.</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="section reveal">
-        <h2>Analytics</h2>
-        <div className="grid">
-          <div className="card"><h3>15,000+</h3><p>Locations Analyzed</p></div>
-          <div className="card"><h3>120,000+</h3><p>Recommendations Generated</p></div>
-          <div className="card"><h3>2.5M+</h3><p>Environmental Records</p></div>
-          <div className="card"><h3>+23%</h3><p>Average Yield Improvement</p></div>
-        </div>
-      </section>
-
-      <section className="section" style={{textAlign:"center"}}>
-        <h2>Find the Best Crops for Your Farm Today</h2>
-        <button className="btn">📍 Analyze My Location</button>
-      </section>
+      <footer className="footer glass-panel">
+        <h2>Contact Us</h2>
+        <p>Have questions or need custom agricultural AI solutions?</p>
+        <a href="mailto:ecoalliancegreensolutions@gmail.com" className="contact-email">
+          ✉️ ecoalliancegreensolutions@gmail.com
+        </a>
+      </footer>
     </div>
   );
 }
+
+export default App;
