@@ -1,4 +1,4 @@
-      import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import EnvironmentalForm from './components/EnvironmentalForm';
 import PredictionResult from './components/PredictionResult';
 import AnalyticsDashboard from './components/AnalyticsDashboard';
